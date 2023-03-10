@@ -29,7 +29,7 @@ const Loginprofile = ({user}) => {
       <>
         <div class=" py-1 px-3 h6 login_border cursor_pointer ">
           <a href="/profile" class="text-white ">
-            My Resume
+            My events
           </a>
         </div>
         <div
@@ -51,7 +51,7 @@ function Navbar({user}) {
             <div class=" row py-2 ">
               <div class=" col-lg-4 ">
                 <a class=" text-white" href="/">
-                  <h3 class="cursor_pointer"> Resume Maker </h3>
+                  <h3 class="cursor_pointer"> Soccer Pro </h3>
                 </a>
               </div>
 

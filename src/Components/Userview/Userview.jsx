@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import "../../Assets/Common.css";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,32 +8,62 @@ import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "react-query";
 import axios from "axios";
 
-const Singletrainingview = ({ handleButtonClick }) => {
+const Singletrainingview = ({
+  handleButtonClick,
+  training,
+  user,
+  tgroupid,
+  setTgroupid,
+  jointrainggroup,
+}) => {
+  const booktraingbatch = (training_id) => {
+    //handleButtonClick()
+    setTgroupid(training_id);
+  };
   return (
     <Outersectionsingletrainingview>
       <div className="bg-training p-3 ">
-        <h2>ground name goes here</h2>
-        <h6>ground dimensions goes here</h6>
-        <h6>date and timing goes here</h6>
-        <h6>price goes here</h6>
-        <div onClick={() => handleButtonClick()} className="cursor_pointer">
+        <h1>{training.name}</h1>
+        <p>{training.startDate}</p> <p>{training.endDate}</p>
+        <h2>{training.time}</h2>
+        <h6>coach name : {training.coach.user.name}</h6>
+        <div
+          onClick={() => booktraingbatch(training.training_id)}
+          className="cursor_pointer"
+        >
           <h3 className="w-100 book-now-coach text-center">Book now</h3>
         </div>
       </div>
     </Outersectionsingletrainingview>
   );
 };
-const Singlecoachview = ({ handlecoachbooking }) => {
+const Singlecoachview = ({ coach, user }) => {
+  const handlecoachbooking = (coach_id) => {
+    //console.log("----", coach_id)
+    axios
+      .post(process.env.REACT_APP_BACKEND_URL + "/player/bookPersonalCoach/" + coach_id + "/" + user.pid)
+      .then(
+        (response) => {
+          console.log("----",response);
+          if (response.data == 1) {
+            toast.success("succesfully booked the coach", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        },
+        (error) => {}
+      );
+  };
+
   return (
     <Outersectionsinglecoachview>
       <div className="bg-coach p-3 ">
-        <h2>coach name goes here</h2>
-        <h6>how many years of exp..</h6>
-        <h6>$200 per hour</h6>
-        <div className="d-flex flex-row">
-          <div>s1</div> <div>s2</div> <div>s3</div> <div>s4</div>
-        </div>
-        <div onClick={() => handlecoachbooking()} className="cursor_pointer">
+        <h2>{coach.user.name}</h2>
+        <h6>{coach.user.email}</h6>
+        <div
+          onClick={() => handlecoachbooking(coach.coach_id)}
+          className="cursor_pointer"
+        >
           <h3 className="w-100 book-now-coach text-center">
             Request for the coach
           </h3>
@@ -42,7 +72,6 @@ const Singlecoachview = ({ handlecoachbooking }) => {
     </Outersectionsinglecoachview>
   );
 };
-
 const Showbookingdateandtime = ({ booking }) => {
   if (booking.bookingdate === "none" && booking.bookingtime === "none") {
     return <></>;
@@ -70,7 +99,13 @@ const getallgroundsfunc = async () => {
 };
 const getallcoachesfunc = async () => {
   const response = await axios.get(
-    `${process.env.REACT_APP_BACKEND_URL}/user/all`
+    `${process.env.REACT_APP_BACKEND_URL}/coach/all`
+  );
+  return response.data;
+};
+const getalltrainingsfunc = async (user) => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_BACKEND_URL}/club/getAllTrainingGroup/${user.clubid}`
   );
   return response.data;
 };
@@ -78,6 +113,7 @@ const getallcoachesfunc = async () => {
 function Userview({ user, updateUser }) {
   const [visiblegroundbooking, setVisiblegroundbooking] = useState(false); // groundbooking overlay show or not
   const [personalcoachbooking, setPersonalcoachbooking] = useState(false); // personal coach booking overlay show or not
+  const [tgroupid, setTgroupid] = useState(-1); //
   const [clubid, setClubid] = useState(-1);
   const [selectedDivIndex, setSelectedDivIndex] = useState(-1);
   const [booking, setBooking] = useState({
@@ -87,15 +123,53 @@ function Userview({ user, updateUser }) {
 
   //join the club player
   const joinclub = () => {
-    axios.post(process.env.REACT_APP_BACKEND_URL + "player/joinclub/" + clubid, { params: { pid: user.email } }).then(
-      (response) => {
-        console.log(response.data);
-      },
-      (error) => {
-        console.log("some error");
-      }
-    );
+    axios
+      .post(process.env.REACT_APP_BACKEND_URL + "player/joinclub/" + clubid, {
+        params: { pid: user.email },
+      })
+      .then(
+        (response) => {
+          console.log(response.data);
+        },
+        (error) => {
+          console.log("some error");
+        }
+      );
   };
+
+  const jointrainggroup = () => {
+    //console.log(tgroupid);
+    axios
+      .post(
+        process.env.REACT_APP_BACKEND_URL +
+          "/player/joingroup/" +
+          tgroupid +
+          "/" +
+          user.pid
+      )
+      .then(
+        (response) => {
+          console.log(response.data);
+          if (response.data === 1) {
+            toast.success("succesfully joined the trainng group", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          } else {
+            toast.error("some error occured", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        },
+        (error) => {
+          console.log("some error");
+        }
+      );
+  };
+
+  
+  useEffect(() => {
+    jointrainggroup();
+  }, [tgroupid]);
 
   const {
     data: allgrounds,
@@ -111,6 +185,15 @@ function Userview({ user, updateUser }) {
     isLoading: allcoachesloading,
     refetch: refetchallcoaches,
   } = useQuery("get_all_coaches", () => getallcoachesfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
+
+  const {
+    data: alltrainings,
+    isLoading: alltrainingsloading,
+    refetch: refetchalltrainings,
+  } = useQuery("get_all_training", () => getalltrainingsfunc(user), {
     refetchOnMount: false,
     refetchInterval: 5000,
   });
@@ -139,13 +222,16 @@ function Userview({ user, updateUser }) {
       autoClose: 2000,
     });*/
   };
+
   const cancealcoachbooking = () => {
     setPersonalcoachbooking(false);
   };
 
-  if (allgroundsloading) {
+  if (allgroundsloading || alltrainingsloading || allcoachesloading) {
     return "loading";
   }
+
+  //console.log(allcoaches);
   return (
     <>
       <ToastContainer />
@@ -341,55 +427,28 @@ function Userview({ user, updateUser }) {
             <div className="container">
               <h1 className="mt-5">book a coach for personal training</h1>
               <div className="row">
-                <div className="col-lg-4 my-2">
-                  <Singlecoachview handlecoachbooking={handlecoachbooking} />
-                </div>
-                <div className="col-lg-4 my-2">
-                  <Singlecoachview handlecoachbooking={handlecoachbooking} />
-                </div>
-                <div className="col-lg-4 my-2">
-                  <Singlecoachview handlecoachbooking={handlecoachbooking} />
-                </div>
-                <div className="col-lg-4 my-2">
-                  <Singlecoachview handlecoachbooking={handlecoachbooking} />
-                </div>
+                {allcoaches.map((coach, index) => (
+                  <div className="col-lg-4 my-2" key={index}>
+                    <Singlecoachview coach={coach} user={user} />
+                  </div>
+                ))}
               </div>
 
               <h1 className="mt-5">Book a ground for personal traing</h1>
               <div className="row">
-                <div className="col-lg-4 my-2 singletrain">
-                  <Singletrainingview handleButtonClick={handleButtonClick} />
-                </div>
-                <div className="col-lg-4 my-2">
-                  <Singletrainingview handleButtonClick={handleButtonClick} />
-                </div>
-                <div className="col-lg-4 my-2">
-                  <Singletrainingview handleButtonClick={handleButtonClick} />
-                </div>
-                <div className="col-lg-4 my-2">
-                  <Singletrainingview handleButtonClick={handleButtonClick} />
-                </div>
+                {alltrainings.map((training) => (
+                  <div className="col-lg-4 my-2 singletrain">
+                    <Singletrainingview
+                      handleButtonClick={handleButtonClick}
+                      training={training}
+                      user={user}
+                      tgroupid={tgroupid}
+                      setTgroupid={setTgroupid}
+                      jointrainggroup={jointrainggroup}
+                    />
+                  </div>
+                ))}
               </div>
-
-              {/*<h1 className="mt-5">
-              Register for a club for feel proud about it.
-            </h1>
-            <Registerforaclub>
-              <input
-                type="text"
-                placeholder="enter the club it to register for it"
-                className="px-3"
-              />
-              <input
-                type="submit"
-                value="register"
-                className="btn btn-primary mx-5"
-              />
-              <p style={{ color: "red" }} className="p-small">
-                *please do not share this code with others. for more price
-                realted details contact the clubs
-              </p>
-        </Registerforaclub>*/}
             </div>
           )}
 

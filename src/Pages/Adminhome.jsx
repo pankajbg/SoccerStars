@@ -27,13 +27,15 @@ const Showbookingdateandtime = ({ booking }) => {
 
 const Singlecoachview = ({ coach }) => {
   const deletecoach = (pid) => {
-    axios.get(process.env.REACT_APP_BACKEND_URL+ "/coach/delete/"+pid)
-      .then((response) => {
-        console.log(response.data)
-      }, (error) => {
-        console.log("some error")
-       })
-  }
+    axios.get(process.env.REACT_APP_BACKEND_URL + "/coach/delete/" + pid).then(
+      (response) => {
+        console.log(response.data);
+      },
+      (error) => {
+        console.log("some error");
+      }
+    );
+  };
   return (
     <>
       <Outersectionsinglecoachview>
@@ -44,7 +46,10 @@ const Singlecoachview = ({ coach }) => {
           <div className="d-flex flex-row">
             <div>s1</div> <div>s2</div> <div>s3</div> <div>s4</div>
           </div>
-          <div className="cursor_pointer" onClick={()=>deletecoach(coach.coach_id)}>
+          <div
+            className="cursor_pointer"
+            onClick={() => deletecoach(coach.coach_id)}
+          >
             <h3 className="w-100 book-now-coach text-center">delete</h3>
           </div>
         </div>
@@ -55,21 +60,26 @@ const Singlecoachview = ({ coach }) => {
 
 const Singleplayerview = ({ player }) => {
   const deleteplayer = (pid) => {
-    axios.get(process.env.REACT_APP_BACKEND_URL+ "/player/delete/"+pid)
-      .then((response) => {
-        console.log(response.data)
-      }, (error) => {
-        console.log("some error")
-       })
-  }
+    axios.get(process.env.REACT_APP_BACKEND_URL + "/player/delete/" + pid).then(
+      (response) => {
+        console.log(response.data);
+      },
+      (error) => {
+        console.log("some error");
+      }
+    );
+  };
   return (
     <>
       <Outersectionsinglecoachview>
         <div className="bg-coach p-3 ">
-        <h2>{player.player_id}</h2>
+          <h2>{player.player_id}</h2>
           <h2>{player.user.name}</h2>
           <h6>{player.user.email}</h6>
-          <div className="cursor_pointer" onClick={()=>deleteplayer(player.pid)}>
+          <div
+            className="cursor_pointer"
+            onClick={() => deleteplayer(player.pid)}
+          >
             <h3 className="w-100 book-now-coach text-center">delete</h3>
           </div>
         </div>
@@ -78,28 +88,22 @@ const Singleplayerview = ({ player }) => {
   );
 };
 
-
-
-
-
-
-
 //_______________________________________________
-const getallplayersfunc = async() => {
+const getallplayersfunc = async () => {
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND_URL}/player/all`
   );
-  return response.data
+  return response.data;
 };
 const Seeandadduser = () => {
-  const { data: allplayers, isLoading:il1, refetch: refetchallplayers } = useQuery(
-    "get_all_players",
-    () => getallplayersfunc(),
-    {
-      refetchOnMount: false,
-      refetchInterval: 5000,
-    }
-  );
+  const {
+    data: allplayers,
+    isLoading: il1,
+    refetch: refetchallplayers,
+  } = useQuery("get_all_players", () => getallplayersfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
 
   let players = ["coach1", "coach2", "coach3"];
   //console.log(allplayers)
@@ -117,54 +121,67 @@ const Seeandadduser = () => {
     //console.log(player);
   };
   const addplayer = () => {
-    player.roles = "PLAYER"
-    axios.post(process.env.REACT_APP_BACKEND_URL + "/user/add", player)
-      .then((response) => {
-        console.log(response)
-      }, (error) => { })
-  }
+    player.roles = "PLAYER";
+    axios.post(process.env.REACT_APP_BACKEND_URL + "/user/add", player).then(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {}
+    );
+  };
 
   if (il1) return "Loading...";
   return (
     <div className="container">
       <div className="row">
         {allplayers.map((player, index) => (
-          <div className="col-4 my-2" key={index}>
-            <Singleplayerview  player={player} />
+          <div className="col-lg-4  col-sm-6 col-12 my-2" key={index}>
+            <Singleplayerview player={player} />
           </div>
         ))}
       </div>
       <Addplayerview className="mt-5">
         <h1>Add an player</h1>
-        <div class="d-flex flex-row">
-          <input
-            type="text"
-            placeholder="enter player name"
-            className="px-2"
-            name="name"
-            onChange={changePlayer}
-          />
-          <input
-            type="text"
-            placeholder="set player email id for login"
-            className="px-3 mx-3"
-            name="email"
-            onChange={changePlayer}
-          />
-          <input
-            type="text"
-            placeholder="set player password"
-            name="password"
-            className="px-3"
-            onChange={changePlayer}
-          />
-          <input
-            type="submit"
-            value="create new player"
-            name="password"
-            className="px-3 btn btn-primary mx-2"
-            onClick={()=>addplayer()}
-          />
+        <div class="row">
+          <div className="col-lg-4 col-12">
+            <input
+              type="text"
+              placeholder="enter player name"
+              className="px-2 m-2"
+              name="name"
+              onChange={changePlayer}
+            />
+          </div>
+
+          <div className="col-lg-4 col-12">
+            <input
+              type="text"
+              placeholder="set player email id for login"
+              className="px-3 col-lg-4 col-12 m-2"
+              name="email"
+              onChange={changePlayer}
+            />
+          </div>
+
+          <div className="col-lg-4 col-12">
+            <input
+              type="text"
+              placeholder="set player password"
+              name="password"
+              className="px-3 col-lg-4 col-12 m-2"
+              onChange={changePlayer}
+            />
+          </div>
+
+          <div className="col-lg-4 col-12">
+            <input
+              type="submit"
+              value="create new player"
+              name="password col-lg-4 col-12"
+              className="px-3 btn btn-primary m-2"
+              onClick={() => addplayer()}
+            />
+          </div>
         </div>
       </Addplayerview>
     </div>
@@ -172,27 +189,13 @@ const Seeandadduser = () => {
 };
 //___________________________________________________________
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //______________________________________________
 const getallcoachesfunc = async () => {
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND_URL}/coach/all`
   );
-  return response.data
-}
+  return response.data;
+};
 const Seeallcoaches = () => {
   const [coach, setCoach] = useState({
     name: "",
@@ -209,64 +212,79 @@ const Seeallcoaches = () => {
     //console.log(coach);
   };
   const addcoach = () => {
-    coach.roles = "COACH"
-    axios.post(process.env.REACT_APP_BACKEND_URL + "/user/add", coach)
-      .then((response) => {
-        console.log(response)
-      }, (error) => { })
-  }
+    coach.roles = "COACH";
+    axios.post(process.env.REACT_APP_BACKEND_URL + "/user/add", coach).then(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {}
+    );
+  };
 
-  const { data: allcoaches, isLoading:allcoachesloading, refetch: refetchallcoaches } = useQuery(
-    "get_all_coaches",
-    () => getallcoachesfunc(),
-    {
-      refetchOnMount: false,
-      refetchInterval: 5000,
-    }
-  );
+  const {
+    data: allcoaches,
+    isLoading: allcoachesloading,
+    refetch: refetchallcoaches,
+  } = useQuery("get_all_coaches", () => getallcoachesfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
 
   //console.log(allcoaches)
 
-  if(allcoachesloading) {return "loading"}
+  if (allcoachesloading) {
+    return "loading";
+  }
   return (
     <div className="container">
       <div className="row container">
         {allcoaches.map((coach, index) => (
-          <div className="col-4 my-2" key={index}>
+          <div className="col-lg-4  col-sm-6 col-12 my-2" key={index}>
             <Singlecoachview coach={coach} />
           </div>
         ))}
       </div>
       <Addplayerview className="mt-5">
         <h1>Add a new coach</h1>
-        <div class="d-flex flex-row">
-          <input
-            type="text"
-            placeholder="enter coach name"
-            className="px-2"
-            name="name"
-            onChange={changePlayer}
-          />
-          <input
-            type="text"
-            placeholder="set player username"
-            className="px-3 mx-3"
-            name="email"
-            onChange={changePlayer}
-          />
-          <input
-            type="text"
-            placeholder="set player password"
-            name="password"
-            className="px-3"
-            onChange={changePlayer}
-          />
-          <input
-            type="submit"
-            value="create new coach"
-            className="px-3 btn btn-primary mx-2"
-            onClick={()=>addcoach()}
-          />
+        <div class="row">
+          <div className="col-lg-4 col-12">
+            <input
+              type="text"
+              placeholder="enter coach name"
+              className="px-2 m-2"
+              name="name"
+              onChange={changePlayer}
+            />
+          </div>
+
+          <div className="col-lg-4 col-12">
+            <input
+              type="text"
+              placeholder="set coach emailid/username for login"
+              className="px-3 m-2"
+              name="email"
+              onChange={changePlayer}
+            />
+          </div>
+
+          <div className="col-lg-4 col-12">
+            <input
+              type="text"
+              placeholder="set coach password"
+              name="password"
+              className="px-3 m-2"
+              onChange={changePlayer}
+            />
+          </div>
+
+          <div className="col-lg-4 col-12">
+            <input
+              type="submit"
+              value="create new coach"
+              className="px-3 btn btn-primary mx-2"
+              onClick={() => addcoach()}
+            />
+          </div>
         </div>
       </Addplayerview>
     </div>
@@ -274,26 +292,53 @@ const Seeallcoaches = () => {
 };
 //_______________________________________________
 
-
-
-
-
-
-
-
-
 //___________________________________________________
-const Addtrainingsession = () => {
-  const [visiblegroundbooking, setVisiblegroundbooking] = useState(false); // groundbooking
+const Addtrainingsession = ({ user }) => {
   const [selectedDivIndex, setSelectedDivIndex] = useState(-1);
   const [booking, setBooking] = useState({
     bookingdate: "none",
     bookingtime: "none",
   });
+  const [training, setTraining] = useState({
+    name: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  const {
+    data: allcoaches,
+    isLoading: allcoachesloading,
+    refetch: refetchallcoaches,
+  } = useQuery("get_all_coaches", () => getallcoachesfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
+
+  const changeTraining = (event) => {
+    const { name, value } = event.target;
+    setTraining((prevObject) => ({
+      ...prevObject,
+      [name]: value,
+    }));
+    console.log(training)
+  };
+
+  const addEvent = () => {
+    training.time = booking.bookingtime
+    console.log(training);
+    axios.post(process.env.REACT_APP_BACKEND_URL + "/club/addTrainingGroup/" + user.clubid+"/1", training).then(
+      (response) => {
+        console.log(response.data);
+      },
+      (error) => {
+        console.log("some error");
+      }
+    );
+    
+  };
   const time_slot_for_a_ground = ["Div 1", "Div 2", "Div 3", "Div 4"];
   function handleButtonClick() {
     window.scrollTo(0, 0);
-    setVisiblegroundbooking(!visiblegroundbooking);
   }
   function handlebookingdate(event) {
     setBooking({ ...booking, bookingdate: event.target.value });
@@ -303,111 +348,76 @@ const Addtrainingsession = () => {
     setSelectedDivIndex(index);
   };
   return (
-    <Admin_view_schedule_traing_season>
-      {visiblegroundbooking && (
-        <div className="overlay">
-          <div className="bookoutside p-3">
-            <div className="row">
-              <div className="col-lg-6">
-                <h5>Ground details</h5>
-                <Outersectionsingletrainingview className="mb-5">
-                  <div className="bg-training p-3 ">
-                    <h2>ground name goes here</h2>
-                    <h6>ground dimensions goes here</h6>
-                  </div>
-                </Outersectionsingletrainingview>
+    <Admin_view_schedule_traing_season className="container">
+      <Addplayerview className="mt-5">
+        <h1>Add an traing batch</h1>
+        <div class="">
+          <input
+            type="text"
+            placeholder="enter traing batch name"
+            className="px-2"
+            name="name"
+            onChange={changeTraining}
+          />
+          <br />
 
-                <h5>Coach details</h5>
-                <Outersectionsinglecoachview>
-                  <div className="bg-coach p-3 ">
-                    <h2>coach name goes here</h2>
-                    <h6>how many years of exp..</h6>
-                    <div className="d-flex flex-row">
-                      <div>s1</div> <div>s2</div> <div>s3</div> <div>s4</div>
-                    </div>
-                  </div>
-                </Outersectionsinglecoachview>
-              </div>
-              <div className="col-lg-6">
-                <h2>choose a date and time</h2>
-                <input type="date" onChange={handlebookingdate} />
-                <div className="row my-3">
-                  {time_slot_for_a_ground.map((single_time_slot, index) => (
-                    <div className="col-lg-6">
-                      <div
-                        className="singletimeslot h6 cursor_pointer px-3"
-                        onClick={() => handlebookingtime("08.00-10.00", index)}
-                        style={{
-                          backgroundColor:
-                            selectedDivIndex === index ? "red" : "#38bacf",
-                        }}
-                      >
-                        08.00-10.00
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          <br/>
+          <div className="d-flex flex-row my-3">
+            <div>
+              <h5>select a start date</h5>
+              <input
+                type="date"
+                placeholder="choose the start date"
+                className="px-3"
+                name="startDate"
+                onChange={changeTraining}
+              />
+            </div>
 
-                <Showbookingdateandtime booking={booking} />
-                <div className="row">
-                  <div className="col-lg-6">
-                    <div className="h5 text-white book_now text-center p-2 cursor_pointer">
-                      Book now
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div
-                      className="h5 canceal_now text-center p-2 cursor_pointer"
-                      onClick={() => {
-                        setBooking({
-                          bookingdate: "none",
-                          bookingtime: "none",
-                        });
-                        setSelectedDivIndex(-1);
-                        setVisiblegroundbooking(false);
-                      }}
-                    >
-                      canceal now
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="mx-5">
+              <h5>select a end date</h5>
+              <input
+                type="date"
+                placeholder="choose the start date"
+                className="px-3 mx-3"
+                name="endDate"
+                onChange={changeTraining}
+              />
             </div>
           </div>
-        </div>
-      )}
-      {!visiblegroundbooking && (
-        <div className="container">
-          <h1 className="mt-5">book a coach for personal training</h1>
-          <div className="row">
-            <div className="col-lg-4 my-2">
-              <Singlecoachview handleButtonClick={handleButtonClick} />
-            </div>
-            <div className="col-lg-4 my-2">
-              <Singlecoachview handleButtonClick={handleButtonClick} />
-            </div>
-            <div className="col-lg-4 my-2">
-              <Singlecoachview handleButtonClick={handleButtonClick} />
-            </div>
-            <div className="col-lg-4 my-2">
-              <Singlecoachview handleButtonClick={handleButtonClick} />
-            </div>
+          <br />
+
+          <h5>choose a time duration for the traing batch</h5>
+          <div className="row my-3">
+            {time_slot_for_a_ground.map((single_time_slot, index) => (
+              <div className="col-lg-3">
+                <div
+                  className="singletimeslot h6 cursor_pointer px-3"
+                  onClick={() => handlebookingtime("08.00-10.00", index)}
+                  style={{
+                    backgroundColor:
+                      selectedDivIndex === index ? "red" : "#38bacf",
+                  }}
+                >
+                  08.00-10.00
+                </div>
+              </div>
+            ))}
           </div>
+
+          <input
+            type="submit"
+            value="create new training batch"
+            name="password"
+            className="px-3 btn btn-primary"
+            onClick={() => addEvent()}
+          />
         </div>
-      )}
+      </Addplayerview>
     </Admin_view_schedule_traing_season>
   );
 };
 //______________________________________________________-
-
-
-
-
-
-
-
-
-
 
 //_______________________________________________________________
 const Aproovecoachrequests = () => {
@@ -467,7 +477,7 @@ const Aproovecoachrequests = () => {
 };
 //_________________________________________________________________
 
-const Returncomponentbasedonchoose = ({ choose }) => {
+const Returncomponentbasedonchoose = ({ choose, user }) => {
   if (choose === 0) {
     return <Seeandadduser />;
   }
@@ -475,7 +485,7 @@ const Returncomponentbasedonchoose = ({ choose }) => {
     return <Seeallcoaches />;
   }
   if (choose === 2) {
-    return <Addtrainingsession />;
+    return <Addtrainingsession user={user}  />;
   }
   if (choose === 3) {
     return <Aproovecoachrequests />;
@@ -507,7 +517,7 @@ function Adminhome({ user }) {
             </div>
           ))}
         </div>
-        <Returncomponentbasedonchoose choose={choose} />
+        <Returncomponentbasedonchoose choose={choose} user={user} />
       </div>
     </Outsideadminhome>
   );

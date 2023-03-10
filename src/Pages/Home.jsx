@@ -9,7 +9,7 @@ const Returnthemainview = ({ user , updateUser}) => {
   if (user.isloggedin === "no") {
     return (
       <>
-        <Userview user={user} />
+        <h1>123456</h1>
       </>
     );
   } else if (user.isloggedin === "yes") {
@@ -41,10 +41,13 @@ const Returnthemainview = ({ user , updateUser}) => {
 function Home(props) {
   const { cort, cortid } = useParams();
   let [user, setUser] = useState({
-    isregisteredforclub:true,
+    pid:"52",
+    isregisteredforclub: true,
+    clubid:"1",
     isloggedin: "yes",
     email: "",
     userrole: "player",
+    
   });
   const updateUser = (newUser) => {
     setUser(newUser);
@@ -69,6 +72,7 @@ function Home(props) {
   useEffect(() => {}, [user]);
     return (
       <>
+        <img src="footbal1.gif" />
         <Returnthemainview user={user} updateUser={updateUser} />
       </>
     );
