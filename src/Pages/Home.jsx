@@ -4,30 +4,31 @@ import Navbar from "../Components/Navbar/Navbar";
 import Userview from "../Components/Userview/Userview";
 import Adminhome from "./Adminhome";
 import Coachhome from './Coachhome'
+import Homewithoutlogin from './Homewithoutlogin'
 
 const Returnthemainview = ({ user , updateUser}) => {
-  if (user.isloggedin === "no") {
+  if (localStorage.getItem("isloggedin") === null) {
     return (
       <>
-        <h1>123456</h1>
+        <h1><Homewithoutlogin/></h1>
       </>
     );
-  } else if (user.isloggedin === "yes") {
-    if (user.userrole === "player") {
+  } else if (localStorage.getItem("isloggedin") === "yes") {
+    if (localStorage.getItem("userrole") === "PLAYER") {
       return (
         <>
           <Userview user={user} updateUser={updateUser} />
         </>
       );
     }
-    if (user.userrole === "admin") {
+    if (localStorage.getItem("userrole") === "ADMIN") {
       return (
         <>
           <Adminhome user={user} />
         </>
       );
     }
-    if (user.userrole === "coach") {
+    if (localStorage.getItem("userrole") === "COACH") {
       return (
         <>
           <Coachhome user={user} />
@@ -41,12 +42,18 @@ const Returnthemainview = ({ user , updateUser}) => {
 function Home(props) {
   const { cort, cortid } = useParams();
   let [user, setUser] = useState({
-    pid:"52",
+    pid: "52",
+    
     isregisteredforclub: true,
-    clubid:"1",
+    clubid: "1",
+    
     isloggedin: "yes",
     email: "",
+
+
     userrole: "player",
+
+    trainingbooking : null
     
   });
   const updateUser = (newUser) => {
@@ -72,7 +79,7 @@ function Home(props) {
   useEffect(() => {}, [user]);
     return (
       <>
-        <img src="footbal1.gif" />
+        {/*<img src="footbal1.gif" />*/}
         <Returnthemainview user={user} updateUser={updateUser} />
       </>
     );

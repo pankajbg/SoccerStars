@@ -3,8 +3,11 @@ import "../Assets/Common.css";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Navbar from "../Components/Navbar/Navbar";
+import Footer from "./Footer";
 
 const Showbookingdateandtime = ({ booking }) => {
   if (booking.bookingdate === "none" && booking.bookingtime === "none") {
@@ -29,10 +32,10 @@ const Singlecoachview = ({ coach }) => {
   const deletecoach = (pid) => {
     axios.get(process.env.REACT_APP_BACKEND_URL + "/coach/delete/" + pid).then(
       (response) => {
-        console.log(response.data);
+        //console.log(response.data);
       },
       (error) => {
-        console.log("some error");
+        //console.log("some error");
       }
     );
   };
@@ -42,10 +45,6 @@ const Singlecoachview = ({ coach }) => {
         <div className="bg-coach p-3 ">
           <h2>{coach.user.name}</h2>
           <h6>{coach.user.email}</h6>
-          <h6>$200 per hour</h6>
-          <div className="d-flex flex-row">
-            <div>s1</div> <div>s2</div> <div>s3</div> <div>s4</div>
-          </div>
           <div
             className="cursor_pointer"
             onClick={() => deletecoach(coach.coach_id)}
@@ -62,10 +61,14 @@ const Singleplayerview = ({ player }) => {
   const deleteplayer = (pid) => {
     axios.get(process.env.REACT_APP_BACKEND_URL + "/player/delete/" + pid).then(
       (response) => {
-        console.log(response.data);
+        //console.log(response.data);
       },
       (error) => {
-        console.log("some error");
+        //console.log("some error");
+        toast.error("this player can not be deleted", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+
       }
     );
   };
@@ -106,7 +109,7 @@ const Seeandadduser = () => {
   });
 
   let players = ["coach1", "coach2", "coach3"];
-  //console.log(allplayers)
+  //////console.log(allplayers)
   const [player, setPlayer] = useState({
     name: "",
     email: "",
@@ -118,13 +121,19 @@ const Seeandadduser = () => {
       ...prevObject,
       [name]: value,
     }));
-    //console.log(player);
+    ////console.log(player);
   };
   const addplayer = () => {
     player.roles = "PLAYER";
+    if (player.name == "" || player.email == "" || player.password == "") {
+      toast.error("enter all the fields", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
     axios.post(process.env.REACT_APP_BACKEND_URL + "/user/add", player).then(
       (response) => {
-        console.log(response);
+        //console.log(response);
       },
       (error) => {}
     );
@@ -141,7 +150,7 @@ const Seeandadduser = () => {
         ))}
       </div>
       <Addplayerview className="mt-5">
-        <h1>Add an player</h1>
+        <h1>Add a player</h1>
         <div class="row">
           <div className="col-lg-4 col-12">
             <input
@@ -209,13 +218,19 @@ const Seeallcoaches = () => {
       ...prevObject,
       [name]: value,
     }));
-    //console.log(coach);
+    ////console.log(coach);
   };
   const addcoach = () => {
     coach.roles = "COACH";
+    if (coach.name == "" || coach.email == "" || coach.password == "") {
+      toast.error("enter all the fields", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
     axios.post(process.env.REACT_APP_BACKEND_URL + "/user/add", coach).then(
       (response) => {
-        console.log(response);
+        //console.log(response);
       },
       (error) => {}
     );
@@ -230,7 +245,7 @@ const Seeallcoaches = () => {
     refetchInterval: 5000,
   });
 
-  //console.log(allcoaches)
+  ////console.log(allcoaches)
 
   if (allcoachesloading) {
     return "loading";
@@ -293,8 +308,24 @@ const Seeallcoaches = () => {
 //_______________________________________________
 
 //___________________________________________________
+
+const getallclubfunc = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_BACKEND_URL}/club/all`
+  );
+  return response.data;
+};
 const Addtrainingsession = ({ user }) => {
   const [selectedDivIndex, setSelectedDivIndex] = useState(-1);
+  const [timeslot, setTimeslot] = useState([
+    "08:00-10:00",
+    "10:00-12:00",
+    "12:00-14:00",
+    "14:00-16:00",
+    "16:00-18:00",
+    "18:00-20:00",
+    "20:00-22:00",
+  ]);
   const [booking, setBooking] = useState({
     bookingdate: "none",
     bookingtime: "none",
@@ -304,6 +335,17 @@ const Addtrainingsession = ({ user }) => {
     startDate: "",
     endDate: "",
   });
+  const [coach, setCoach] = useState("");
+  const [club, setClub] = useState("");
+  const handleOptionChange = (event) => {
+    setCoach(event.target.value);
+    //console.log(coach);
+  };
+
+  const handleOptionChangeclub = (event) => {
+    setClub(event.target.value);
+    //console.log(club);
+  };
 
   const {
     data: allcoaches,
@@ -314,43 +356,67 @@ const Addtrainingsession = ({ user }) => {
     refetchInterval: 5000,
   });
 
+  const {
+    data: allclub,
+    isLoading: allclubloading,
+    refetch: refetchallclub,
+  } = useQuery("get_all_club", () => getallclubfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
+
   const changeTraining = (event) => {
     const { name, value } = event.target;
     setTraining((prevObject) => ({
       ...prevObject,
       [name]: value,
     }));
-    console.log(training)
+    //console.log(training);
   };
 
   const addEvent = () => {
-    training.time = booking.bookingtime
-    console.log(training);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "/club/addTrainingGroup/" + user.clubid+"/1", training).then(
-      (response) => {
-        console.log(response.data);
-      },
-      (error) => {
-        console.log("some error");
-      }
-    );
-    
+    training.time = booking.bookingtime;
+    //console.log(coach+"-----"+club)
+    if (
+      training.name == "" ||
+      training.startDate == "" ||
+      training.endDate == "" || club=="" || coach==""
+    ) {
+      toast.error("enter all the fields", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
+    axios
+      .post(
+        process.env.REACT_APP_BACKEND_URL + "/club/addTrainingGroup/" +coach+ "/"+club,
+        training
+      )
+      .then(
+        (response) => {
+          //console.log(response.data);
+          toast.success("this event has been added", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        },
+        (error) => {
+          //console.log("some error");
+        }
+      );
   };
-  const time_slot_for_a_ground = ["Div 1", "Div 2", "Div 3", "Div 4"];
-  function handleButtonClick() {
-    window.scrollTo(0, 0);
-  }
-  function handlebookingdate(event) {
-    setBooking({ ...booking, bookingdate: event.target.value });
-  }
+
   const handlebookingtime = (val, index) => {
     setBooking({ ...booking, bookingtime: val });
     setSelectedDivIndex(index);
   };
+
+  //console.log(allcoaches);
+
+  if (allcoachesloading || allclubloading) return "loading";
   return (
     <Admin_view_schedule_traing_season className="container">
       <Addplayerview className="mt-5">
-        <h1>Add an traing batch</h1>
+        <h1>Add a training batch</h1>
         <div class="">
           <input
             type="text"
@@ -360,8 +426,30 @@ const Addtrainingsession = ({ user }) => {
             onChange={changeTraining}
           />
           <br />
+          <h5>choose a coach</h5>
+          <select value={coach} onChange={handleOptionChange}>
+          <option value="" key="">
+                choose a coach
+              </option>
+            {allcoaches.map((option) => (
+              <option value={option.coach_id} key={option.coach_id}>
+                {option.user.name}
+              </option>
+            ))}
+          </select>
+          <h5>choose a club</h5>
+          <select value={club} onChange={handleOptionChangeclub}>
+          <option value="" key="">
+                choose a club
+              </option>
+            {allclub.map((club) => (
+              <option value={club.club_id} key={club.coach_id}>
+                {club.club_name}
+              </option>
+            ))}
+          </select>
 
-          <br/>
+          <br />
           <div className="d-flex flex-row my-3">
             <div>
               <h5>select a start date</h5>
@@ -387,19 +475,19 @@ const Addtrainingsession = ({ user }) => {
           </div>
           <br />
 
-          <h5>choose a time duration for the traing batch</h5>
+          <h5>choose a time duration for the training batch</h5>
           <div className="row my-3">
-            {time_slot_for_a_ground.map((single_time_slot, index) => (
+            {timeslot.map((single_time_slot, index) => (
               <div className="col-lg-3">
                 <div
                   className="singletimeslot h6 cursor_pointer px-3"
-                  onClick={() => handlebookingtime("08.00-10.00", index)}
+                  onClick={() => handlebookingtime(single_time_slot, index)}
                   style={{
                     backgroundColor:
                       selectedDivIndex === index ? "red" : "#38bacf",
                   }}
                 >
-                  08.00-10.00
+                  {single_time_slot}
                 </div>
               </div>
             ))}
@@ -420,61 +508,89 @@ const Addtrainingsession = ({ user }) => {
 //______________________________________________________-
 
 //_______________________________________________________________
+const getallpendingrequestfunc = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_BACKEND_URL}/admin/getAllPersonalCoachRequest`
+  );
+  return response.data;
+};
+
+const Rendersinglecoachbooking = ({ spr, approve }) => {
+  if (spr.status === "WAITING") {
+    return (
+      <>
+        <tr className="not_heading_row my-1 h6">
+          <td>{spr.player.user.name}</td>
+          <td>{spr.player.user.email}</td>
+          <td>{spr.coach.user.name}</td>
+
+          <td className="p-2">
+            <input
+              type="submit"
+              className="btn btn-success mx-3"
+              value="approve"
+              onClick={() => approve(spr.personal_training_id)}
+            />
+          </td>
+        </tr>
+      </>
+    );
+  }
+};
+
 const Aproovecoachrequests = () => {
+  const {
+    data: allpendingrequest,
+    isLoading: allpendingrequestloading,
+    refetch: refetchallpendingrequest,
+  } = useQuery("get_all_allpendingrequest", () => getallpendingrequestfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
+  //console.log(allpendingrequest);
+
+  const approve = (coachbookid) => {
+    axios
+      .post(
+        process.env.REACT_APP_BACKEND_URL +
+          "/admin/approvePersonalCoachRequest/" +
+          coachbookid
+      )
+      .then(
+        (response) => {
+          //console.log(response);
+          refetchallpendingrequest();
+          /*toast.success("approved the coach requests", {
+            position: toast.POSITION.TOP_RIGHT,
+          });*/
+        },
+        (error) => {}
+      );
+  };
+
+  if (allpendingrequestloading) return "loading";
   return (
     <Approvecoach className="container">
       <table style={{ width: "100%" }}>
-        <tr className="heading_row h2">
-          <th>Player name</th>
-          <th>Requested coach</th>
-          <th>date</th>
-          <th>time</th>
-          <th>buttons</th>
-        </tr>
-        <tr className="not_heading_row my-1 h6">
-          <td>Player name</td>
-          <td>Requested coach</td>
-          <td>date</td>
-          <td>time</td>
-          <td className="p-2">
-            <input type="submit" className="btn btn-success" value="approve" />
-            <input type="submit" className="btn btn-danger" value="deny" />
-          </td>
-        </tr>
-        <tr className="not_heading_row my-5 h6">
-          <td>Player name</td>
-          <td>Requested coach</td>
-          <td>date</td>
-          <td>time</td>
-          <td className="p-2">
-            <input type="submit" className="btn btn-success" value="approve" />
-            <input type="submit" className="btn btn-danger" value="deny" />
-          </td>
-        </tr>
-        <tr className="not_heading_row my-1 h6">
-          <td>Player name</td>
-          <td>Requested coach</td>
-          <td>date</td>
-          <td>time</td>
-          <td className="p-2">
-            <input type="submit" className="btn btn-success" value="approve" />
-            <input type="submit" className="btn btn-danger" value="deny" />
-          </td>
-        </tr>
-        <tr className="not_heading_row my-5 h6">
-          <td>Player name</td>
-          <td>Requested coach</td>
-          <td>date</td>
-          <td>time</td>
-          <td className="p-2">
-            <input type="submit" className="btn btn-success" value="approve" />
-            <input type="submit" className="btn btn-danger" value="deny" />
-          </td>
-        </tr>
+        <thead>
+          <tr className="heading_row h2">
+            <th>Player name</th>
+            <th>Player contacts</th>
+            <th>Requested coach</th>
+            <th>buttons</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {allpendingrequest.map((spr) => (
+            <Rendersinglecoachbooking spr={spr} approve={approve} />
+          ))}
+        </tbody>
       </table>
     </Approvecoach>
   );
 };
+
 //_________________________________________________________________
 
 const Returncomponentbasedonchoose = ({ choose, user }) => {
@@ -485,15 +601,17 @@ const Returncomponentbasedonchoose = ({ choose, user }) => {
     return <Seeallcoaches />;
   }
   if (choose === 2) {
-    return <Addtrainingsession user={user}  />;
+    return <Addtrainingsession user={user} />;
   }
   if (choose === 3) {
     return <Aproovecoachrequests />;
   }
 };
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function Adminhome({ user }) {
   const [choose, setChoose] = useState(0);
+  console.warn = function () {};
   let actions = [
     "add or delete players",
     "add or delete coaches",
@@ -501,25 +619,31 @@ function Adminhome({ user }) {
     "approve coach requests",
   ];
   return (
-    <Outsideadminhome>
-      <Navbar user={user} />
-      <div className="">
-        <div className="container d-flex flex-row my-3">
-          {actions.map((action, index) => (
-            <div
-              className="singletimeslot mx-2 p-2 h6 cursor_pointer"
-              style={{
-                backgroundColor: choose === index ? "red" : "#38bacf",
-              }}
-              onClick={() => setChoose(index)}
-            >
-              {action}
-            </div>
-          ))}
+    <>
+      <ToastContainer />
+
+      <Outsideadminhome>
+        <Navbar user={user} />
+        <div className="">
+          <div className="container d-flex flex-row my-3">
+            {actions.map((action, index) => (
+              <div
+                className="singletimeslot mx-2 p-2 h6 cursor_pointer"
+                style={{
+                  backgroundColor: choose === index ? "red" : "#38bacf",
+                }}
+                onClick={() => setChoose(index)}
+              >
+                {action}
+              </div>
+            ))}
+          </div>
+          <Returncomponentbasedonchoose choose={choose} user={user} />
         </div>
-        <Returncomponentbasedonchoose choose={choose} user={user} />
-      </div>
-    </Outsideadminhome>
+        <Extrapaddingforbottom></Extrapaddingforbottom>
+        <Footer />
+      </Outsideadminhome>
+    </>
   );
 }
 
@@ -561,6 +685,7 @@ const Admin_view_schedule_traing_season = styled.div`
 `;
 
 const Outsideadminhome = styled.div`
+  background-color: slategrey;
   .singletimeslot {
     background-color: #2aabe4;
     color: white;
@@ -603,6 +728,9 @@ const Outersectionsingletrainingview = styled.div`
     background-color: #2aabe4;
     border-radius: 20px;
   }
+`;
+const Extrapaddingforbottom = styled.div`
+  height: 600px;
 `;
 
 export default Adminhome;

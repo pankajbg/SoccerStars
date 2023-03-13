@@ -116,6 +116,10 @@ input[type="checkbox"]{
 select{
   border : none ;
 }
+.cursor_pointer_1{
+  color:red;
+  cursor:pointer;
+}
 
 select:focus{
   outline : none ;

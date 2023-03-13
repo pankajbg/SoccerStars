@@ -1,15 +1,24 @@
 import React from "react";
 import "../../Assets/Common.css";
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 
-const Loginprofile = ({user}) => {
+const Loginprofile = ({ user }) => {
+  const navigate = useNavigate();
 
   const signout = () => {
-    localStorage.removeItem("emailid");
-    localStorage.removeItem("username");
+    localStorage.removeItem("pid");
+    localStorage.removeItem("isregisteredforclub");
+    localStorage.removeItem("clubid");
+    localStorage.removeItem("isloggedin");
+    localStorage.removeItem("email");
+    localStorage.removeItem("userrole");
+    localStorage.removeItem("trainingbooking");
+    localStorage.removeItem("coachbooking");
+    navigate("/");
   };
 
-  if (user.isloggedin === "no") {
+  if (localStorage.getItem("isloggedin") === null ) {
     return (
       <>
         <div class=" py-1 px-3 h6 login_border cursor_pointer ">
@@ -28,7 +37,7 @@ const Loginprofile = ({user}) => {
     return (
       <>
         <div class=" py-1 px-3 h6 login_border cursor_pointer ">
-          <a href="/profile" class="text-white ">
+          <a href="/upcomingevents" class="text-white ">
             My events
           </a>
         </div>
@@ -36,7 +45,7 @@ const Loginprofile = ({user}) => {
           class=" py-1 px-3 p-small  cursor_pointer text-white h6"
           onClick={signout}
         >
-          logout <i class="fa fa-sign-out px-2" aria-hidden="true"></i>
+          logout <i class="fa fa-sign-out px-2" aria-hidden="true" onClick={() => signout()}></i>
         </div>
       </>
     );
