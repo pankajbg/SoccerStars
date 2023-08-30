@@ -5,7 +5,6 @@ h2 {
   font-size: 32px;
   margin-bottom: 20px;
   text-align: center;
-
 }
 
 /* Styling for the main heading */
@@ -28,11 +27,14 @@ h2 {
   position: relative;
   margin-top: 5px;
   padding: 10px;
-} 
+}
 /* Add a border around the carousel container */
 .carousel-container {
   border: 5px solid #3f7608; /* Adjust the border width and color */
   border-radius: 20px; /* Add rounded corners to the border */
   padding: 40px;
   box-shadow: 0px 0px 10px rgba(21, 134, 3, 0.692); /* Add a subtle shadow */
+}
+.error {
+  color: red;
 }

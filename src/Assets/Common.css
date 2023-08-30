@@ -10,6 +10,31 @@ h1,
   font-family: 'Secular One', sans-serif;
 }
 
+/* Add this CSS to your stylesheet or style block */
+.club-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.club-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #109d52e7;
+  width: calc(33.33% - 20px); /* Adjust this value as needed */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.club-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
 h2,
 .h2 {
   font-weight: 700;

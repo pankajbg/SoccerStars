@@ -3,10 +3,8 @@ import "./login.css";
 import emailjs from "@emailjs/browser";
 import "../../Assets/Common.css";
 import Navbaronlyhome from "../Navbar/Navbar";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import axios from "axios";
 import Footer from "../../Pages/Footer";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +44,37 @@ const Register = () => {
 
   const trytoregister = async () => {
     // event.preventDefault();
-    if (formdata.password != formdata.conpass) {
+
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    const hasUppercase = /[A-Z]+/;
+    const hasLowercase = /[a-z]+/;
+    const hasNumber = /[0-9]+/;
+
+
+    if (formdata.username === "") {
+      toast.error("🚫 Please enter a username", {
+        position: "top-right",
+        });
+      return;
+    } else if (formdata.username.length < 5) {
+      toast.error("🚫 Username should be at least 3 characters", {
+        position: "top-right",
+      });
+      return;
+    } else if (formdata.username.split(" ").length > 3) {
+      toast.error("🚫 Username should not have more than 5 words", {
+        position: "top-right",
+      });
+      return;
+    } else if (!/^[a-zA-Z0-9]+$/.test(formdata.username)) {
+      toast.error("🚫 Username should only contain letters and numbers", {
+        position: "top-right",
+      });
+      return;
+    }
+
+    
+    if (formdata.password !== formdata.conpass) {
       //console.log("passwoed not match");
       toast.error("🚫 password not match", {
         position: "top-right",
@@ -59,7 +87,41 @@ const Register = () => {
         autoClose: 2000,
       });
       return;
+    }else if (formdata.password.length < 8) {
+      toast.error("🚫 Password should be at least 8 characters", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
     }
+    if (!hasSpecialChar.test(formdata.password)) {
+      toast.error("🚫 Password should contain at least one special character", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    } else if (!hasUppercase.test(formdata.password)) {
+      toast.error("🚫 Password should contain at least one uppercase letter", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    } else if (!hasLowercase.test(formdata.password)) {
+      toast.error("🚫 Password should contain at least one lowercase letter", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    } else if (!hasNumber.test(formdata.password)) {
+      toast.error("🚫 Password should contain at least one number", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    }
+    
+
+
     if (formdata.email === "") {
       toast.error("🚫 username too small", {
         position: "top-right",
@@ -68,7 +130,7 @@ const Register = () => {
       return;
     } else {
       var validEmail = formdata.email.match(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        /^[a-zA-Z]+@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
       if (!validEmail) {
         toast.error("🚫 enter valid email id", {
@@ -88,6 +150,8 @@ const Register = () => {
       roles: drole,
     };
 
+
+  
     //console.log(user);
     await axios
       .post(process.env.REACT_APP_BACKEND_URL + "/user/add", user)
@@ -150,8 +214,9 @@ const Register = () => {
         };
       }
     });
-    ////console.log(formdata)
+   
   };
+  
 
   return (
     <>

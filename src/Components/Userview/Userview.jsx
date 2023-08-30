@@ -11,6 +11,9 @@ import Footer from "../../Pages/Footer";
 
 import Singlegroundview from "../../Components/Singlegroundview";
 
+
+
+
 // * child component to view a single traing batch and register
 const Singletrainingview = ({
   handleButtonClick,
@@ -160,6 +163,13 @@ const getallcoachesfunc = async () => {
   );
   return response.data;
 };
+
+const getallclubfunc = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_BACKEND_URL}/club/all`
+  );
+  return response.data;
+};
 const getalltrainingsfunc = async (user) => {
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND_URL}/club/getAllTrainingGroup/${user.clubid}`
@@ -180,6 +190,8 @@ function Userview({ user, updateUser }) {
 
   const [clubid, setClubid] = useState(-1);
   const [selectedDivIndex, setSelectedDivIndex] = useState(-1);
+  
+  
   const [booking, setBooking] = useState({
     bookingdate: "none",
     bookingtime: "none",
@@ -202,6 +214,16 @@ function Userview({ user, updateUser }) {
     "18:00-20:00",
     "20:00-22:00",
   ]);
+
+  
+  const {
+    data: allclub,
+    isLoading: allclubloading,
+    refetch: refetchallclub,
+  } = useQuery("get_all_club", () => getallclubfunc(), {
+    refetchOnMount: false,
+    refetchInterval: 5000,
+  });
 
   //join the club player
   const joinclub = () => {
@@ -361,6 +383,7 @@ function Userview({ user, updateUser }) {
     refetchOnMount: false,
     refetchInterval: 5000,
   });
+  
 
   const {
     data: allcoaches,
@@ -469,22 +492,43 @@ function Userview({ user, updateUser }) {
 
         {!localStorage.getItem("isregisteredforclub") && (
           <Registerforaclub className="container my-5">
-            <h1>Register for a club first to get all the e-benifits</h1>
+            <h1>Register for a club first to get all the e-benefits</h1>
+           
             <input
               type="text"
-              placeholder="Enter The Club ID To Register"
+              placeholder="enter the club name to register for it"
               className="px-3"
               onChange={(event) => {
                 setClubid(event.target.value);
                 ////console.log(clubid);
               }}
             />
+
             <input
               type="submit"
               value="register"
               className="btn btn-success mx-5"
               onClick={() => setPaymetpage(true)}
             />
+            <p style={{ color: "red" }} className="p-small">
+              *Please do not share this with others. For more price related
+              details contact the clubs
+            </p>
+<div>
+  <h2>Club Names and IDs</h2>
+  <div className="club-cards">
+    {allclub.map((club) => (
+      <div className="club-card" key={club.club_id}>
+        <p>Club ID: {club.club_id}</p>
+        <p>Club Name: {club.club_name}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+
+
             
           </Registerforaclub>
         )}

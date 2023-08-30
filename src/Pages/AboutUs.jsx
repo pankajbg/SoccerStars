@@ -61,32 +61,7 @@ function AboutUs() {
         <h2 style={{ textAlign: "center" }}>Our Team</h2>
         <div className="row justify-content-between">
           {/* Team members */}
-          <div className="col-md-4">
-            <div className="card-about">
-              <img
-                src={imageRahul}
-                className="card-img-top rounded-circle border ali"
-                alt="Card"
-                style={{ width: "200px", height: "200px", margin: "auto" }}
-              />
-              <div className="container-about">
-                <h2>Rahul Manker</h2>
-                <p className="title-about">Backend Developer</p>
-                <p>
-                  <FaEnvelope /> rahul123@gmail.com
-                </p>
 
-                <div className="social-icons">
-                  <a href="https://instagram.com/jai_tembhare?utm_source=qr&igshid=MzNlNGNkZWQ4Mg%3D%3D">
-                    <FaInstagram />
-                  </a>
-                  <a href="https://www.linkedin.com/in/jai-tembhare-1b4665204">
-                    <FaLinkedin />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
           <div className="col-md-4">
             <div className="card-about">
               <img
@@ -107,6 +82,32 @@ function AboutUs() {
                     <FaInstagram />
                   </a>
                   <a href="https://www.linkedin.com/in/ruchika-gaidhani-670972199/">
+                    <FaLinkedin />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card-about">
+              <img
+                src={imageRahul}
+                className="card-img-top rounded-circle border ali"
+                alt="Card"
+                style={{ width: "200px", height: "200px", margin: "auto" }}
+              />
+              <div className="container-about">
+                <h2>Rahul Manker</h2>
+                <p className="title-about">Backend Developer</p>
+                <p>
+                  <FaEnvelope /> rahul123@gmail.com
+                </p>
+
+                <div className="social-icons">
+                  <a href="https://instagram.com/jai_tembhare?utm_source=qr&igshid=MzNlNGNkZWQ4Mg%3D%3D">
+                    <FaInstagram />
+                  </a>
+                  <a href="https://www.linkedin.com/in/jai-tembhare-1b4665204">
                     <FaLinkedin />
                   </a>
                 </div>
