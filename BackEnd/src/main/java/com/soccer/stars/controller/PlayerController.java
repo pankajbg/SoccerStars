@@ -1,0 +1,230 @@
+package com.soccer.stars.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.soccer.stars.model.Booking;
+import com.soccer.stars.model.BookingSlot;
+import com.soccer.stars.model.Club;
+import com.soccer.stars.model.Coach;
+import com.soccer.stars.model.Ground;
+import com.soccer.stars.model.PersonalTrainingRequest;
+import com.soccer.stars.model.Player;
+import com.soccer.stars.model.TrainingGroup;
+import com.soccer.stars.service.BookingService;
+import com.soccer.stars.service.ClubService;
+import com.soccer.stars.service.CoachService;
+import com.soccer.stars.service.GroundService;
+import com.soccer.stars.service.PersonalTrainingService;
+import com.soccer.stars.service.PlayerService;
+import com.soccer.stars.service.SlotService;
+import com.soccer.stars.service.TrainingGroupService;
+
+@RestController
+@RequestMapping(value = "/player")
+public class PlayerController implements CrudController<Player, Integer> {
+	@Autowired
+	PlayerService service;
+	
+	@Autowired
+	TrainingGroupService traingGroupService;
+
+	@Autowired
+	ClubService clubService;
+	
+	@Autowired
+	CoachService coachService;
+	
+	@Autowired
+	GroundService groundService;
+	
+	@Autowired
+	BookingService bookingService;
+	
+	@Autowired
+	PersonalTrainingService personalTrainingService;
+	
+	@Autowired
+	SlotService slotService;
+
+	@Override
+	@PostMapping("/add")
+	public int add(@RequestBody Player model) {
+		// TODO Auto-generated method stub
+		service.add(model);
+		return 1;
+	}
+
+	@Override
+	@GetMapping("/delete/{id}")
+	public int delete(@PathVariable("id") Integer id) {
+		// TODO Auto-generated method stub
+		service.delete(id);
+		return 1;
+	}
+
+	@Override
+	@PostMapping("/update")
+	public int update(@RequestBody Player model) {
+		// TODO Auto-generated method stub
+		service.update(model);
+		return 1;
+	}
+
+	@Override
+	@GetMapping("/all")
+	public List<Player> getAll() {
+		// TODO Auto-generated method stub
+		return service.getAll();
+	}
+
+	@Override
+	@GetMapping("/get/{id}")
+	public Player getById(@PathVariable("id") Integer id) {
+		// TODO Auto-generated method stub
+		return service.getById(id);
+	}
+
+	@PostMapping(value = "/joinclub/{clubid}")
+	public int joinClub(@PathVariable("clubid") Integer clubid, @RequestParam Integer pid) {
+		Club club = clubService.getById(clubid);
+		if (club == null) {
+			System.out.println(clubid);
+			return 0;
+		}
+		Player player = service.getById(pid);
+
+		if (player == null) {
+			//System.out.println(model.getPid());
+			return 0;
+		}
+
+		player.setClub(club);
+		List<Player> players = club.getPlayers();
+		if (players == null) {
+			players = new ArrayList<Player>();
+		}
+		players.add(player);
+		club.setPlayers(players);
+		service.update(player);
+		clubService.update(club);
+		return 1;
+
+	}
+	
+	@PostMapping(value = "/joingroup/{groupid}/{pid}")
+	public int joinTrainingGroup(@PathVariable("groupid") Integer groupid, @PathVariable("pid") Integer pid) {
+		Player player = service.getById(pid);
+		if(player == null)
+			return 0;
+		TrainingGroup group = traingGroupService.getById(groupid);
+		if(group == null)
+			return 0;
+		List<Player> players = group.getPlayers();
+		if (players == null) {
+			players = new ArrayList<Player>();
+		}
+		players.add(player);
+		group.setPlayers(players);
+		player.setGroup(group);
+		if(group.getPlayerCount() == null) {
+			group.setPlayerCount(1);
+		}else {
+			group.setPlayerCount(group.getPlayerCount()+1);
+		}
+		
+		service.update(player);
+		traingGroupService.update(group);
+		return 1;
+	}
+	
+	@PostMapping(value = "/bookPersonalCoach/{coachid}/{pid}")
+	public int bookPersonalCoach(@PathVariable("coachid") Integer coachid, @PathVariable("pid") Integer pid) {
+		Player player = service.getById(pid);
+		if(player == null)
+			return 0;
+		Coach coach = coachService.getById(coachid);
+		if(coach == null)
+			return 0;
+		
+		PersonalTrainingRequest request = new PersonalTrainingRequest();
+		request.setCoach(coach);
+		request.setPlayer(player);
+		request.setStatus("WAITING");
+		personalTrainingService.update(request);
+		return 1;
+	}
+	
+	@PostMapping(value = "/bookGround/{pid}/{gid}")
+	public int bookGround(@PathVariable("pid") Integer pid, @PathVariable("gid") Integer gid, @RequestBody BookingSlot slot) {
+		Player player = service.getById(pid);
+		if(player == null)
+			return 0;
+		Ground ground = groundService.getById(gid);
+		if(ground == null)
+			return 0;
+		
+		slot.setGround(ground);
+		System.out.println(1);
+		slotService.update(slot);
+		
+		Booking booking =new Booking();
+		booking.setSlot(slot);
+		booking.setPlayer(player);
+		// time format = [08:00-10:00]
+		String fromTime = slot.getTime().substring(0,5);
+		String toTime = slot.getTime().substring(6,11);
+		booking.setStartTime(fromTime);
+		booking.setEndTime(toTime);
+		System.out.println(2);
+		bookingService.add(booking);
+		
+		player.setBooking(booking);
+		System.out.println(3);
+		service.update(player);
+		
+		List<BookingSlot> slots = ground.getSlots();
+		if(slots == null) {
+			slots = new ArrayList<BookingSlot>();
+		}
+		slots.add(slot);
+		ground.setSlots(slots); // set booked slots
+		System.out.println(4);
+		groundService.update(ground);
+		return 1;
+	}
+	
+
+	@GetMapping("/hasCoach/{pid}")
+	public int hasCoach(@PathVariable Integer pid) {
+		Player player = service.getById(pid);
+		if(player == null)
+			return 0;
+		
+		if(player.getPersonalCoach() != null)
+			return player.getPersonalCoach().getCoach_id();
+		return 0;
+	}
+	
+	@GetMapping("/hasTrainingGroup/{pid}")
+	public int hasTrainingGroup(@PathVariable Integer pid) {
+		Player player = service.getById(pid);
+		if(player == null)
+			return 0;
+		
+		if(player.getGroup() != null)
+			return player.getGroup().getTraining_id();
+		return 0;
+	}
+	
+
+}

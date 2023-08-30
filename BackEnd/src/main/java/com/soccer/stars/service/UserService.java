@@ -1,0 +1,52 @@
+package com.soccer.stars.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.soccer.stars.model.Users;
+import com.soccer.stars.repo.UsersRepository;
+
+@Service
+public class UserService implements CrudService<Users, String>{
+
+	@Autowired
+	UsersRepository repo;
+	
+	@Override
+	public void add(Users t) {
+		// TODO Auto-generated method stub
+		repo.save(t);
+	}
+
+	@Override
+	public Users getById(String id) {
+		// TODO Auto-generated method stub
+		return (repo.findById(id).equals(Optional.empty()))?null:repo.findById(id).get();
+	}
+
+	@Override
+	public List<Users> getAll() {
+		// TODO Auto-generated method stub
+		return repo.findAll();
+	}
+
+	@Override
+	public void update(Users t) {
+		// TODO Auto-generated method stub
+		repo.save(t);
+	}
+
+	@Override
+	public String delete(String id) {
+		// TODO Auto-generated method stub
+		if(repo.findById(id).equals(Optional.empty())) return "Email Not Found";
+		repo.deleteById(id);
+		return id;
+	}
+
+
+	
+}
