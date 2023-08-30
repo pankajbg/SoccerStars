@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Navbar from '../Components/Navbar/Navbar'
-
+import Footer from "./Footer";
 const getalltrainingsfunc = async () => {
   const response = await axios.get(
     `${
@@ -46,9 +46,9 @@ function Userupcomingevents(props) {
     <>
       <Navbar user={alltrainings} />
       <div className="container">
-        <h1>upcoming traing group</h1>
+        <h1>Upcoming Training Group</h1>
         {!localStorage.getItem("trainingbooking") && (
-          <h1>You did't join any training group</h1>
+          <h1>You didn't join any training group</h1>
         )}
         {alltrainings.map((t) => {
           if (t.training_id == localStorage.getItem("trainingbooking")) {
@@ -57,24 +57,24 @@ function Userupcomingevents(props) {
                 <Outersectionsingletrainingview>
                   <div className="bg-training p-3 ">
                     <h3>
-                      <u>training batch name: </u>
+                      <u>Training Batch Name: </u>
                       {t.name}
                     </h3>
                     <h5>
-                      <u>start date: </u>
+                      <u>Start Date: </u>
                       {t.startDate}
                     </h5>{" "}
                     <h5>
                       {" "}
-                      <u>end date: </u>
+                      <u>End Date: </u>
                       {t.endDate}
                     </h5>
                     <h6>
                       {" "}
-                      <u>batch date: </u> {t.time}
+                      <u>Batch Time: </u> {t.time}
                     </h6>
                     <h6>
-                      <u>coach name :</u> {t.coach.user.name}
+                      <u>Coach Name :</u> {t.coach.user.name}
                     </h6>
                   </div>
                 </Outersectionsingletrainingview>
@@ -84,9 +84,9 @@ function Userupcomingevents(props) {
         })}
 
         <hr />
-        <h1>Your coach booking</h1>
+        <h1>Your Coach Booking</h1>
         {!localStorage.getItem("coachbooking") && (
-          <h6>You did't book any personal coach</h6>
+          <h6>You Didn't Book Any Personal Coach</h6>
         )}
         {allcoaches.map((c) => {
           if (c.coach_id == localStorage.getItem("coachbooking")) {
@@ -95,11 +95,11 @@ function Userupcomingevents(props) {
                 <Outersectionsingletrainingview>
                   <div className="bg-training p-3 ">
                     <h3>
-                      <u>coach name: </u>
+                      <u>Coach Name: </u>
                       {c.user.name}
                     </h3>
                     <h5>
-                      <u>contacts: </u>
+                      <u>Contacts: </u>
                       {c.user.email}
                     </h5>{" "}
                   </div>
@@ -111,6 +111,9 @@ function Userupcomingevents(props) {
       </div>
     </>
   );
+  <div classname="footer">
+  <Footer />
+</div>
 }
 
 const Outersectionsingletrainingview = styled.div`

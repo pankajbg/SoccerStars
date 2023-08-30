@@ -27,9 +27,9 @@ const Singletrainingview = ({
       });
       return;
     } else {
-      booktraingbatch(tid)
+      booktraingbatch(tid);
     }
-  }
+  };
   const booktraingbatch = (training_id) => {
     //handleButtonClick()
     setTgroupid(training_id);
@@ -38,30 +38,32 @@ const Singletrainingview = ({
     <Outersectionsingletrainingview>
       <div className="bg-training p-3 ">
         <h3>
-          <u>training batch name: </u>
+          <u>Training Batch Name: </u>
           {training.name}
         </h3>
         <h5>
-          <u>start date: </u>
+          <u>Start Date: </u>
           {training.startDate}
         </h5>{" "}
         <h5>
           {" "}
-          <u>end date: </u>
+          <u>End Date: </u>
           {training.endDate}
         </h5>
         <h6>
           {" "}
-          <u>batch date: </u> {training.time}
+          <u>Batch Date: </u> {training.time}
         </h6>
         <h6>
-          <u>coach name :</u> {training.coach.user.name}
+          <u>Coach Name :</u> {training.coach.user.name}
         </h6>
         <div
-          onClick={() => checkplayercountandbooktraingbatch(training.training_id)}
+          onClick={() =>
+            checkplayercountandbooktraingbatch(training.training_id)
+          }
           className="cursor_pointer"
         >
-          <h3 className="w-100 book-now-coach text-center">Book now</h3>
+          <h3 className="w-100 book-now-coach text-center">Book Now</h3>
         </div>
       </div>
     </Outersectionsingletrainingview>
@@ -102,11 +104,11 @@ const Singlecoachview = ({ coach, user, setCoachbooked }) => {
     <Outersectionsinglecoachview>
       <div className="bg-coach p-3 ">
         <h5>
-          <u>coach name: </u>
+          <u>Coach Name: </u>
           {coach.user.name}
         </h5>
         <h6>
-          <u>coach contacts: </u>
+          <u>Coach Contacts: </u>
           {coach.user.email}
         </h6>
         <div
@@ -172,9 +174,7 @@ function Userview({ user, updateUser }) {
   const [tgroupid, setTgroupid] = useState(-1); //
   const [paymetpage, setPaymetpage] = useState(false); //
   const [groundid, setGroundid] = useState(-1);
-  const [ground ,setGround] = useState({});
-
-
+  const [ground, setGround] = useState({});
 
   const [bookedslot, setBookedslot] = useState([]);
 
@@ -304,7 +304,6 @@ function Userview({ user, updateUser }) {
         }
       );
   };
-
 
   //______________________________________________
 
@@ -470,10 +469,10 @@ function Userview({ user, updateUser }) {
 
         {!localStorage.getItem("isregisteredforclub") && (
           <Registerforaclub className="container my-5">
-            <h1>Register for a club forst to get all the ebnifits</h1>
+            <h1>Register for a club first to get all the e-benifits</h1>
             <input
               type="text"
-              placeholder="enter the club name to register for it"
+              placeholder="Enter The Club ID To Register"
               className="px-3"
               onChange={(event) => {
                 setClubid(event.target.value);
@@ -483,18 +482,15 @@ function Userview({ user, updateUser }) {
             <input
               type="submit"
               value="register"
-              className="btn btn-primary mx-5"
+              className="btn btn-success mx-5"
               onClick={() => setPaymetpage(true)}
             />
-            <p style={{ color: "red" }} className="p-small">
-              *please do not share this code with others. for more price realted
-              details contact the clubs
-            </p>
+            
           </Registerforaclub>
         )}
         {paymetpage && (
           <div className="container bg-success text-white p-5">
-            <h1>the price for joining this club is $200</h1>
+            <h1>The price for joining this club is $200</h1>
             <input
               type="submit"
               value="pay and register"
@@ -508,17 +504,25 @@ function Userview({ user, updateUser }) {
             <div className="bookoutside p-3">
               <div className="row">
                 <div className="col-lg-6">
-                  <h5>Ground details</h5>
+                  <h5>Ground Details</h5>
                   <Outersectionsingletrainingview className="mb-5">
                     <div className="bg-training p-3 ">
-                      <h2> <u>ground name: </u> {ground.name}</h2>
-                      <h6><u>ground size: </u> {ground.size}</h6>
-                      <h6><u>ground capacity: </u>{ground.capacity}</h6>
+                      <h4>
+                        {" "}
+                        <u>Ground name</u> : {ground.name}
+                      </h4>
+                      <h6>
+                        <u>Ground size</u> : {ground.size}
+                      </h6>
+                      <h6>
+                        <u>Ground capacity</u> :
+                        {ground.capacity}
+                      </h6>
                     </div>
                   </Outersectionsingletrainingview>
                 </div>
                 <div className="col-lg-6">
-                  <h2>choose a date and time..</h2>
+                  <h2>Choose a date and time...</h2>
                   <input type="date" onChange={handlebookingdate} />
                   <div className="row my-3">
                     {timeslot.map((single_time_slot, index) => {
@@ -563,7 +567,7 @@ function Userview({ user, updateUser }) {
                           setVisiblegroundbooking(false);
                         }}
                       >
-                        canceal now
+                        Cancel now
                       </div>
                     </div>
                   </div>
@@ -577,7 +581,7 @@ function Userview({ user, updateUser }) {
             <div className="bookoutside p-3">
               <div className="row">
                 <div className="col-lg-6">
-                  <h5>Ground details</h5>
+                  <h5>Ground Details</h5>
                   <Outersectionsingletrainingview className="mb-5">
                     <div className="bg-training p-3 ">
                       <h2>ground name goes here</h2>
@@ -585,7 +589,7 @@ function Userview({ user, updateUser }) {
                     </div>
                   </Outersectionsingletrainingview>
 
-                  <h5>Coach details</h5>
+                  <h5>Coach Details</h5>
                   <Outersectionsinglecoachview>
                     <div className="bg-coach p-3 ">
                       <h2>coach name goes here</h2>
@@ -597,15 +601,15 @@ function Userview({ user, updateUser }) {
                   </Outersectionsinglecoachview>
                 </div>
                 <div className="col-lg-6">
-                  <h2 className="">choose a date and time....</h2>
+                  <h2 className="">Choose a date and time....</h2>
 
                   <div className="d-flex flex-row justify-content-between">
                     <div>
-                      <h5>start date</h5>
+                      <h6>Start Date</h6>
                       <input type="date" onChange={handlebookingdate} />
                     </div>
                     <div>
-                      <h5>end date</h5>
+                      <h6>End Date</h6>
                       <input type="date" onChange={handlebookingdate} />
                     </div>
                   </div>
@@ -648,7 +652,7 @@ function Userview({ user, updateUser }) {
                           cancealcoachbooking();
                         }}
                       >
-                        canceal now
+                        Cancel Now
                       </div>
                     </div>
                   </div>
@@ -662,7 +666,7 @@ function Userview({ user, updateUser }) {
           !visiblegroundbooking &&
           localStorage.getItem("isregisteredforclub") && (
             <div className="container">
-              <h1 className="mt-5">book a ground for personal training</h1>
+              <h1 className="mt-5">Book a ground for personal training</h1>
               <div className="row">
                 {allgrounds.map((ground, index) => (
                   <div className="col-lg-4 my-2" key={index}>
@@ -670,12 +674,12 @@ function Userview({ user, updateUser }) {
                       ground={ground}
                       setVisiblegroundbooking={setVisiblegroundbooking}
                       setGroundid={setGroundid}
-                      setGround = {setGround}
+                      setGround={setGround}
                     />
                   </div>
                 ))}
               </div>
-              <h1 className="mt-5">book a coach for personal training</h1>
+              <h1 className="mt-5">Book a coach for personal training</h1>
               <div className="row">
                 {allcoaches.map((coach, index) => (
                   <div className="col-lg-4 my-2" key={index}>
@@ -707,11 +711,12 @@ function Userview({ user, updateUser }) {
           <Footer />
         </div>
       </Outersectionuserview>
+   
     </>
   );
 }
 const Outersectionuserview = styled.div`
-  background-color:lightgray;
+  background-color: white;
   .overlay {
     display: flex;
     justify-content: center;
@@ -719,7 +724,7 @@ const Outersectionuserview = styled.div`
     height: 100%;
     width: 100%;
     position: absolute;
-    background-color: grey;
+    background-color: white;
     z-index: 1;
   }
   .canceal_now {

@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import Navbar from "../Components/Navbar/Navbar";
 import axios from "axios";
 
-import Footer from './Footer'
+import Footer from "./Footer";
 
 
 const coachsessionsfunc = async(user) => {
@@ -115,5 +115,7 @@ const Coachviewoutside = styled.div``;
 const Extrapaddingforbottom = styled.div`
   height: 600px;
 `;
-
+<div classname="footer">
+<Footer />
+</div>
 export default Coachhome;

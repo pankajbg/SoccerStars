@@ -18,7 +18,7 @@ const Loginprofile = ({ user }) => {
     navigate("/");
   };
 
-  if (localStorage.getItem("isloggedin") === null ) {
+  if (localStorage.getItem("isloggedin") === null) {
     return (
       <>
         <div class=" py-1 px-3 h6 login_border cursor_pointer ">
@@ -45,13 +45,18 @@ const Loginprofile = ({ user }) => {
           class=" py-1 px-3 p-small  cursor_pointer text-white h6"
           onClick={signout}
         >
-          logout <i class="fa fa-sign-out px-2" aria-hidden="true" onClick={() => signout()}></i>
+          logout{" "}
+          <i
+            class="fa fa-sign-out px-2"
+            aria-hidden="true"
+            onClick={() => signout()}
+          ></i>
         </div>
       </>
     );
   }
 };
-function Navbar({user}) {
+function Navbar({ user }) {
   return (
     <NavbarouterSection>
       <div id="navbar" class=" outerNavbar ">
@@ -60,22 +65,25 @@ function Navbar({user}) {
             <div class=" row py-2 ">
               <div class=" col-lg-4 ">
                 <a class=" text-white" href="/">
-                  <h3 class="cursor_pointer"> Soccer Pro </h3>
+                  <h3 class="cursor_pointer"> Soccer Stars </h3>
                 </a>
               </div>
 
               <div class=" col-lg-8 text-white">
                 <div class=" d-flex flex-row navbar_option ">
-                  <a href="/about" class="text-white">
-                    <div class=" py-1 px-3 p-small cursor_pointer">About</div>
+                  <a href="/" class="text-white">
+                    <div class=" py-1 px-3 p-small cursor_pointer">HOME</div>
+                  </a>
+                  <a href="/aboutUs" class="text-white">
+                    <div class=" py-1 px-3 p-small cursor_pointer">AboutUs</div>
                   </a>
                   <div class=" py-1 px-3 p-small cursor_pointer ">
-                    <a href="/#learn" class="text-white">
-                      Learn{" "}
+                    <a href="/contactUs" class="text-white">
+                      ContactUs{" "}
                     </a>
                   </div>
 
-                  <Loginprofile user={ user } />
+                  <Loginprofile user={user} />
                 </div>
               </div>
             </div>
@@ -100,18 +108,7 @@ const NavbarouterSection = styled.div`
     border-bottom: 2px solid #e6ecf2;
   }
   .outerNavbar {
-    background: #ad5389; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      to right,
-      #3c1053,
-      #ad5389
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      to right,
-      #3c1053,
-      #ad5389
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    background: #4caf50; /* Green background color */
     box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
   }
 `;

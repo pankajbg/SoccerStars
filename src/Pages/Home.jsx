@@ -3,14 +3,17 @@ import { useParams } from "react-router-dom";
 import Navbar from "../Components/Navbar/Navbar";
 import Userview from "../Components/Userview/Userview";
 import Adminhome from "./Adminhome";
-import Coachhome from './Coachhome'
-import Homewithoutlogin from './Homewithoutlogin'
-
-const Returnthemainview = ({ user , updateUser}) => {
+import Coachhome from "./Coachhome";
+import Homewithoutlogin from "./Homewithoutlogin";
+import Footer from "./Footer";
+import "./Footer.css";
+const Returnthemainview = ({ user, updateUser }) => {
   if (localStorage.getItem("isloggedin") === null) {
     return (
       <>
-        <h1><Homewithoutlogin/></h1>
+        <h1>
+          <Homewithoutlogin />
+        </h1>
       </>
     );
   } else if (localStorage.getItem("isloggedin") === "yes") {
@@ -35,26 +38,26 @@ const Returnthemainview = ({ user , updateUser}) => {
         </>
       );
     }
-    
   }
+  <div classname="Footer">
+    <Footer />
+  </div>;
 };
 
 function Home(props) {
   const { cort, cortid } = useParams();
   let [user, setUser] = useState({
     pid: "52",
-    
+
     isregisteredforclub: true,
     clubid: "1",
-    
+
     isloggedin: "yes",
     email: "",
 
-
     userrole: "player",
 
-    trainingbooking : null
-    
+    trainingbooking: null,
   });
   const updateUser = (newUser) => {
     setUser(newUser);
@@ -77,12 +80,12 @@ function Home(props) {
   };
 
   useEffect(() => {}, [user]);
-    return (
-      <>
-        {/*<img src="footbal1.gif" />*/}
-        <Returnthemainview user={user} updateUser={updateUser} />
-      </>
-    );
+  return (
+    <>
+      {/*<img src="footbal1.gif" />*/}
+      <Returnthemainview user={user} updateUser={updateUser} />
+    </>
+  );
 }
 
 export default Home;

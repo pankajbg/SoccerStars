@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import Topcarousel from "./Topcarousel";
 import Navbar from "../Components/Navbar/Navbar";
 import Footer from "./Footer";
 
@@ -8,6 +8,7 @@ function Homewithoutlogin(props) {
   return (
     <div>
       <Navbar />
+      <Topcarousel />
       <Homewithoutloginout>
         <div className="container">
           <div className="row">
@@ -19,16 +20,16 @@ function Homewithoutlogin(props) {
                 </div>
                 <div className="d-flex flex-column">
                   <h6>
-                    kickstart your career in football with our optimised training
-                    batch or a personal coach.
+                    Kickstart Your Career In Football With Our Optimised
+                    Training Batch Or A Personal Coach.
                   </h6>
                 </div>
                 <div className="d-flex flex-column">
                   <a href="/login">
                     <input
                       type="submit"
-                      value="login/signup"
-                      className="btn btn-primary"
+                      value="Login/Signup"
+                      className="btn btn-success"
                     />{" "}
                   </a>
                 </div>
@@ -39,25 +40,21 @@ function Homewithoutlogin(props) {
             </div>
           </div>
         </div>
-        <Extrapaddingforbottom></Extrapaddingforbottom>
+
       </Homewithoutloginout>
-      
-      <div classname="footer">
-        <Footer/>
+
+      <div classname="Footer">
+        <Footer />
       </div>
     </div>
   );
 }
 const Homewithoutloginout = styled.div`
-  background-color:lightgray;
+  background-color: White;
   img {
     width: 100%;
   }
-  .footer{
-    position: absolute;
-    margin-bottom: 0px;
-  }
-  
+ 
 `;
 const Extrapaddingforbottom = styled.div`
   height: 300px;

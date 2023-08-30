@@ -303,8 +303,14 @@ const Seeallcoaches = () => {
         </div>
       </Addplayerview>
     </div>
+    
   );
+
+  <div classname="footer">
+  <Footer />
+</div>
 };
+
 //_______________________________________________
 
 //___________________________________________________
@@ -655,7 +661,7 @@ const Admin_view_schedule_traing_season = styled.div`
     height: 100%;
     width: 100%;
     position: absolute;
-    background-color: grey;
+    background-color: white;
     z-index: 1;
   }
   .canceal_now {
@@ -685,7 +691,7 @@ const Admin_view_schedule_traing_season = styled.div`
 `;
 
 const Outsideadminhome = styled.div`
-  background-color: slategrey;
+  background-color: white;
   .singletimeslot {
     background-color: #2aabe4;
     color: white;
@@ -711,7 +717,7 @@ const Addplayerview = styled.div`
 `;
 const Approvecoach = styled.div`
   .heading_row {
-    background-color: #ffcd24;
+    background-color: brown;
     color: white;
   }
   .not_heading_row {

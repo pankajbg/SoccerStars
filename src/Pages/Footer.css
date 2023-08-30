@@ -1,0 +1,33 @@
+/* Customize the styles for your footer */
+.footer {
+  background-color: #328a09;
+  color: #ffffff;
+  padding: 50px 0;
+}
+
+
+
+.footer p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.social-icons {
+  margin-top: 20px;
+}
+
+.social-icons a {
+  font-size: 24px;
+  color: #08af16;
+  margin-right: 15px;
+  transition: color 0.3s ease-in-out;
+}
+
+.social-icons a:last-child {
+  margin-right: 0;
+}
+
+.social-icons a:hover {
+  color: #19b20e;
+}
